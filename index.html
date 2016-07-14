@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Bataille Navale feat. jQuery</title>
+		<meta charset="utf-8">
+		
+		<link rel="stylesheet" style="text/css" href="style.css">
+		
+		<script src="jquery-1.8.3.min.js"></script>
+		<script src="jquery.ui.core.js"></script>
+		<script src="jquery.ui.widget.js"></script>
+		<script src="jquery.ui.mouse.js"></script>
+		<script src="jquery.ui.draggable.js"></script>
+		<script src="jquery-collision.min.js"></script>
+		<script src="jquery-ui-draggable-collision.min.js"></script>
+		<script src="script.js" ></script>
+	</head>
+	
+	<body>
+		<div class="wrapper">
+			<h1>BATTLESHIPS</h1>
+			
+			<div class="grid"></div>
+			
+			<div class="log">
+				<div class="logTitle"></div>
+				
+				<div class="playerLog">Waiting for Player...</div>
+				<div class="CPULog">Waiting for CPU...</div>
+				<h3 class="logRows"></h3>
+				
+				<h2 class="redirect"></h2>
+				
+				<div class="CPUBoatsRemaining">CPU</div>
+				<span class="CPUSink" boat=5>5 Sunk</span>
+				<span class="CPUSink" boat=4>4 Sunk</span>
+				<span class="CPUSink" boat=3>3 Sunk</span>
+				<span class="CPUSink" boat=2>2 Sunk</span>
+				
+				<div class="playerBoatsRemaining">PLAYER</div>
+				<span class="PlayerSink" boat=5>5 Sunk</span>
+				<span class="PlayerSink" boat=4>4 Sunk</span>
+				<span class="PlayerSink" boat=3>3 Sunk</span>
+				<span class="PlayerSink" boat=2>2 Sunk</span><br><br>
+				
+				<button id="play">PLAY !</button>
+				
+			</div>
+			<div style="clear:both;"></div>
+		</div>
+	</body>
+</html>
+
+	

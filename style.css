@@ -1,0 +1,211 @@
+body {
+	background:rgb(192,192,255);
+	margin:0px;
+	padding:0px;
+	font-family:arial, sans-serif;
+	font-weight:bold;
+}
+
+h1 {
+	margin:0px 0px 18px 0px;
+	padding:0px;
+	text-align:center;
+}
+
+.redirect {
+	height:10px;
+}
+
+button {
+	font-weight:bold;
+	font-size:20px;
+	width:100px;
+	height:50px;
+	background:orange;
+	border:2px solid black;
+	border-radius:10px;
+}
+
+button:hover {
+	background:rgb(255, 128, 0);
+	color:white;
+}
+
+#five {
+	border:1px solid black;
+	background:grey;
+	width:164px;
+	height:32px;
+	position:absolute;
+	top:422px;
+	left:320px;
+}
+
+#four {
+	border:1px solid black;
+	background:grey;
+	width:131px;
+	height:32px;
+	position:absolute;
+	top:455px;
+	left:320px;
+}
+
+#three {
+	border:1px solid black;
+	background:grey;
+	width:98px;
+	height:32px;
+	position:absolute;
+	top:488px;
+	left:320px;
+}
+
+#two {
+	border:1px solid black;
+	background:grey;
+	width:65px;
+	height:32px;
+	position:absolute;
+	top:521px;
+	left:320px;
+}
+
+.wrapper {
+	/*border:1px solid rgb(160,0,0);*/
+	margin:auto;
+	width:960px;	
+}
+
+.grid {
+	margin:0px;
+	
+	float:left;
+	width:42%;
+}
+
+.log {
+	float:left;
+	width:42%;	
+}
+/*
+.logRows {
+	background: white;
+	padding:5px;
+	margin:0px;
+	font-size:20px;
+}
+*/
+.logTitle {
+	font-size:24px;
+}
+
+.logLine {
+	margin: 0px;
+	padding: 0px;
+	font-size:16px;
+}
+
+table {
+	border-collapse:collapse;
+}
+
+ul {
+	list-style-type:none;
+	position:absolute;
+	
+	margin:0px;
+	padding:0px;
+}
+
+#tableCol1 {
+	top:399px;
+	left:320px;
+}
+
+#tableCol2 {
+	top:30px;
+	left:320px;
+}
+
+#tableCol1 li, #tableCol2 li {
+	display:inline;
+	
+	margin:0px 12px;
+}
+
+#tableRow1 {
+	top:50px;
+	left:293px;
+}
+
+#tableRow2 {
+	top:420px;
+	left:293px;
+}
+
+#tableRow1 li, #tableRow2 li {
+	display:block;
+	
+	margin:15px 0px;
+}
+
+td{
+	border:1px solid black;
+	background:blue;
+	padding:16px;
+	color:white;
+	text-align:center;
+	font-size:10px;
+}
+
+td:hover {
+	cursor:pointer;
+}
+
+.player .boat {
+	background:black;
+}
+/*
+.ia .boat5 {
+	background:rgb(0, 0, 64);
+}
+
+.ia .boat4 {
+	background:rgb(255, 255, 255);
+}
+
+.ia .boat3 {
+	background:rgb(64, 0, 0);
+}
+
+.ia .boat2 {
+	background:rgb(0, 64, 0);
+}
+*/
+.player .boom, .boom {
+	background:red;
+}
+
+.plouf {
+	background:grey;
+}
+
+.playerBoatsRemaining {
+	margin:290px 0px 20px 0px;
+	font-size:32px;
+}
+
+.CPUBoatsRemaining {
+	margin:40px 0px 20px 0px;
+	font-size:32px;
+}
+
+.CPUSink, .PlayerSink {
+	visibility:hidden;
+	margin:0px 5px;
+}
+
+.placetmp {
+	background:white;
+}
