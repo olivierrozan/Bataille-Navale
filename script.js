@@ -343,8 +343,53 @@ function init()
 	$(".board.ia").css("visibility", "hidden");
 }
 
+/**
+ * addRandomPlayerBoats
+ * Ajout des bateaux dans le tableau du joueur
+**/
+function addRandomPlayerBoats(numberOfCells)
+{
+	var isHorizontal = Math.round(Math.random());
+
+	// Horizontal
+	if (isHorizontal == 0) {
+		var coordX = calculCoordIABoatH(numberOfCells, numberOfRows);
+
+		if (coordX.retour) {
+			for (var i = 0; i < numberOfCells; i++) {
+				$('.player .line-' + coordX.posy + ' .col-' + (coordX.posx+i)).addClass('boat').addClass('boat'+numberOfCells);
+			}
+		}
+	}
+	// Vertical
+	else {
+		var coordY = calculCoordIABoatV(numberOfCells, numberOfRows);
+
+		if (coordY.retour) {
+			for (var i = 0; i < numberOfCells; i++) {
+				$('.player .line-' + (coordY.posy+i) + ' .col-' + coordY.posx).addClass('boat').addClass('boat'+numberOfCells);
+			}
+		}
+	}
+}
+
 $(document).ready(function() {
 	init();
+
+	$('#random').on('click', function () {
+		$('td').removeClass('boat')
+		.removeClass('boat2')
+		.removeClass('boat3')
+		.removeClass('boat4')
+		.removeClass('boat5');
+
+		addRandomPlayerBoats(5);
+		addRandomPlayerBoats(4);
+		addRandomPlayerBoats(3);
+		addRandomPlayerBoats(2);
+		placetmp = 8;
+		$("#play").show();
+	});
 
 	// placement des bateaux
 	$(".player td:not('boat')").on("click", function () {
