@@ -7,8 +7,10 @@ var isPlayerBoatSunk;
 var target;
 var timer;
 var placetmp = 0;
-var chanceOfHittingBoat = 50;
 
+// Niveau de difficulté: plus il est elevé, plus le jeu est difficile
+var chanceOfHittingBoat = 99;
+console.log(chanceOfHittingBoat);
 var isPlayerPlaying = true;
 
 /**
@@ -70,26 +72,26 @@ function CPUAimsAtPlayer()
 	var oneBoatCase = Math.round(Math.random() * 13);
 	
 	target = Math.round(Math.random() * 100);
-		
+
 	if (target <= chanceOfHittingBoat) {
-		if ($(".player .boat[ind='" + oneBoatCase + "']").hasClass('plouf') || $(".player .boat[ind='" + oneBoatCase + "']").hasClass('boom')) {		
-			return CPUAimsAtPlayer();
-		}
-		else {					
+		// le CPU touche
+		if (!$(".player .boat[ind='" + oneBoatCase + "']").hasClass('plouf') || !$(".player .boat[ind='" + oneBoatCase + "']").hasClass('boom')) {		
 			checkHit($(".player .boat[ind='" + oneBoatCase + "']"), "CPU ", ".CPULog");
-			return CPUAimsAtPlayer();
+			console.log(target, "Touché");
 		}
+		
+		return CPUAimsAtPlayer();
 	} else {
+		// Le CPU rate
 		if ($td.hasClass('plouf') || $td.hasClass('boom')) {	
 			return CPUAimsAtPlayer();
 		}
 		else {					
-			checkHit($td, "CPU ", ".CPULog");			
+			checkHit($td, "CPU ", ".CPULog");
+			console.log(target, "Raté");
 		}
 	}
-	
-	//$(".CPUBoatsRemaining").text("CPU " + $(".player .boom").length);
-	
+		
 	checkWinner();
 }
 
@@ -116,7 +118,6 @@ function checkHit(td, string, balise)
 		log(string + " at " + td.attr("coord") + " : <span style='color:red;'>MISSED</span><br>", balise);
 		td.addClass('plouf');
 		isPlayerPlaying = !isPlayerPlaying;
-		$("h1").text(isPlayerPlaying);
 	}	
 }
 
@@ -127,14 +128,35 @@ function checkHit(td, string, balise)
 function checkSunk(nb)
 {
 	if ($(".player .boat" + nb + ".boom").length === nb) {
-		//$(".playerBoatsRemaining").append("<nav>" + nb + " Player coule</nav>");
 		isPlayerBoatSunk[nb-2] = true;
 	}
 	
 	if ($(".ia .boat" + nb + ".boom").length === nb) {
-		//$(".CPUBoatsRemaining").append("<nav>" + nb + " CPU coule</nav>");
 		isCPUBoatSunk[nb-2] = true;
 	}
+}
+
+/**
+ * displayDiscoveredBoats
+ * Affiche les bateaux si toutes les cases de ce bateau ont été trouvées
+**/
+function displayDiscoveredBoats()
+{
+	for (var i = 5; i >= 2; i--) {
+		checkSunk(i);
+	}
+	
+	for (var i = 0; i < 4; i++) {
+		if (isCPUBoatSunk[i]) {
+			$(".CPUSink[boat='" + (i + 2) + "']").css("visibility", "visible");
+			$(".ia .boat" + (i + 2) + ".boom").css("background", "green");
+		}
+		
+		if (isPlayerBoatSunk[i]) {
+			$(".PlayerSink[boat='" + (i + 2) + "']").css("visibility", "visible");
+			$(".player .boat" + (i + 2) + ".boom").css("background", "green");
+		}
+	}	
 }
 
 /**
@@ -149,34 +171,14 @@ function PlayerAimsAtCpu()
 		} else {
 			if ($('.player .boat').length == numberOfBoatsPerPlayer) {			
 				checkHit($(this), "Player ", ".playerLog");
-				/*setTimeout(function () { $(".ia td").off('click'); }, 1);
-				setTimeout(CPUAimsAtPlayer, 200);
-				setTimeout(function () { $(".ia td").on('click', PlayerAimsAtCpu) }, 200);*/
+				
 				if (!isPlayerPlaying) {
 					CPUAimsAtPlayer();
 				}
-				
 			}
 		}
 		
-		checkSunk(5);
-		checkSunk(4);
-		checkSunk(3);
-		checkSunk(2);	
-		
-		for (var i = 0; i < 4; i++) {
-			if (isCPUBoatSunk[i]) {
-				$(".CPUSink[boat='" + (i + 2) + "']").css("visibility", "visible");
-				$(".ia .boat" + (i + 2) + ".boom").css("background", "green");
-			}
-			
-			if (isPlayerBoatSunk[i]) {
-				$(".PlayerSink[boat='" + (i + 2) + "']").css("visibility", "visible");
-				$(".player .boat" + (i + 2) + ".boom").css("background", "green");
-			}
-		}
-		
-		//$(".playerBoatsRemaining").text("PLAYER " + $(".ia .boom").length);
+		displayDiscoveredBoats();
 	}
 }
 
@@ -282,8 +284,8 @@ function addAllCPUBoats()
 		addBoatsCPU(3);
 		addBoatsCPU(2);
 		
-		$(".playerBoatsRemaining").text("PLAYER "/* + $(".ia .boom").length*/);
-		$(".CPUBoatsRemaining").text("CPU "/* + $(".player .boom").length*/);
+		$(".playerBoatsRemaining").text("PLAYER ");
+		$(".CPUBoatsRemaining").text("CPU ");
 	}
 }
 
@@ -328,6 +330,10 @@ function placeBoat(label, posX, posY, nbCases)
 	});
 }
 
+/**
+ * coordTables
+ * Affiche les coordonnées de chaque cases des 2 tableaux
+**/ 
 function coordTables()
 {
 	$('.grid').append('<ul id="tableCol1"></ul>');
@@ -343,6 +349,9 @@ function coordTables()
 	for (var i = 1; i < 11; i++) {
 		$("#tableRow1, #tableRow2").append("<li>" + String.fromCharCode(i + 64) + "</li>");
 	}
+	
+	$("#tableCol1").css("visibility", "hidden");
+	$("#tableRow1").css("visibility", "hidden");
 }
 
 /**
@@ -378,6 +387,8 @@ function init()
 			$line.append('<td class="col col-' + j + '" coord="' + String.fromCharCode(i + 65) + (j + 1) + '"></td>');
 		}
 	}
+	
+	$(".board.ia").css("visibility", "hidden");
 }
 
 /**
@@ -395,8 +406,10 @@ function placeAllPlayersBoats ()
 $(document).ready(function() {
 	init();
 	
+	// placement des bateaux
+	
 	$(".player td:not('boat')").on("click", function () {
-		// debut
+		// debut placement bateau5
 		if (placetmp == 0) {
 			placetmp = 1;
 			
@@ -419,13 +432,6 @@ $(document).ready(function() {
 				}
 			});
 			
-			/*$(this).next().on("mouseout", function () {
-				$(this).removeClass("placetmp");
-				$(this).next().removeClass("placetmp");
-				$(this).next().next().removeClass("placetmp");
-				$(this).next().next().next().removeClass("placetmp");
-			});*/
-			
 			$(this).parent().next().children("td:eq(" + $(this).index() + ")").on("mouseover", function () {
 				if (placetmp == 1) {
 					$("td").removeClass("placetmp");
@@ -441,17 +447,10 @@ $(document).ready(function() {
 					});
 				}
 			});
-			
-			/*$(this).parent().next().children("td:eq(" + $(this).index() + ")").on("mouseout", function () {
-				$(this).removeClass("placetmp");
-				$(this).parent().next().children("td:eq(" + $(this).index() + ")").removeClass("placetmp");
-				$(this).parent().next().next().children("td:eq(" + $(this).index() + ")").removeClass("placetmp");
-				$(this).parent().next().next().next().children("td:eq(" + $(this).index() + ")").removeClass("placetmp");
-			});*/
 		}
-		// fin
+		// fin placement bateau5
 		
-		// debut
+		// debut placement bateau4
 		if (placetmp == 2) {
 			placetmp = 3;
 			
@@ -472,13 +471,7 @@ $(document).ready(function() {
 					});
 				}
 			});
-			
-			/*$(this).next().on("mouseout", function () {
-				$(this).removeClass("placetmp");
-				$(this).next().removeClass("placetmp");
-				$(this).next().next().removeClass("placetmp");
-			});*/
-			
+
 			$(this).parent().next().children("td:eq(" + $(this).index() + ")").on("mouseover", function () {
 				if (placetmp == 3) {
 					$("td").removeClass("placetmp");
@@ -493,16 +486,10 @@ $(document).ready(function() {
 					});
 				}
 			});
-			
-			/*$(this).parent().next().children("td:eq(" + $(this).index() + ")").on("mouseout", function () {
-				$(this).removeClass("placetmp");
-				$(this).parent().next().children("td:eq(" + $(this).index() + ")").removeClass("placetmp");
-				$(this).parent().next().next().children("td:eq(" + $(this).index() + ")").removeClass("placetmp");
-			});*/
 		}
-		// fin
+		// fin placement bateau4
 		
-		// debut
+		// debut placement bateau3
 		if (placetmp == 4) {
 			placetmp = 5;
 			
@@ -523,11 +510,6 @@ $(document).ready(function() {
 				}
 			});
 			
-			/*$(this).next().on("mouseout", function () {
-				$(this).removeClass("placetmp");
-				$(this).next().removeClass("placetmp");
-			});*/
-			
 			$(this).parent().next().children("td:eq(" + $(this).index() + ")").on("mouseover", function () {
 				if (placetmp == 5) {
 					$("td").removeClass("placetmp");
@@ -541,15 +523,10 @@ $(document).ready(function() {
 					});
 				}
 			});
-			
-			/*$(this).parent().next().children("td:eq(" + $(this).index() + ")").on("mouseout", function () {
-				$(this).removeClass("placetmp");
-				$(this).parent().next().children("td:eq(" + $(this).index() + ")").removeClass("placetmp");
-			});*/
 		}
-		// fin
+		// fin placement bateau3
 		
-		// debut
+		// debut placement bateau2
 		if (placetmp == 6) {
 			placetmp = 7;
 			
@@ -564,13 +541,10 @@ $(document).ready(function() {
 					$(".placetmp").on("click", function () {
 						placetmp = 8;
 						$(".placetmp").addClass("boat boat2").removeClass("placetmp");
+						$("#play").show();
 					});
 				}
 			});
-			
-			/*$(this).next().on("mouseout", function () {
-				$(this).removeClass("placetmp");
-			});*/
 			
 			$(this).parent().next().children("td:eq(" + $(this).index() + ")").on("mouseover", function () {
 				if (placetmp == 7) {
@@ -581,21 +555,20 @@ $(document).ready(function() {
 					$(".placetmp").on("click", function () {
 						placetmp = 8;
 						$(".placetmp").addClass("boat boat2").removeClass("placetmp");
+						$("#play").show();
 					});
 				}
 			});
-			
-			/*$(this).parent().next().children("td:eq(" + $(this).index() + ")").on("mouseout", function () {
-				$(this).removeClass("placetmp");
-			});*/
 		}
-		// fin
+		// fin placement bateau2
 	});
 	
-	//placeAllPlayersBoats();
-	
-	
+	// Affiche le tableau du CPU quand on clique sur 'play'
 	$("#play").on("click", function () {
+		$(".board.ia").css("visibility", "visible");
+		$("#tableCol1").css("visibility", "visible");
+		$("#tableRow1").css("visibility", "visible");
+		
 		if (placetmp == 8) {
 			
 			$(this).remove();

@@ -16,6 +16,10 @@ h1 {
 	height:10px;
 }
 
+#play {
+	display:none;
+}
+
 button {
 	font-weight:bold;
 	font-size:20px;
@@ -31,48 +35,7 @@ button:hover {
 	color:white;
 }
 
-#five {
-	border:1px solid black;
-	background:grey;
-	width:164px;
-	height:32px;
-	position:absolute;
-	top:422px;
-	left:320px;
-}
-
-#four {
-	border:1px solid black;
-	background:grey;
-	width:131px;
-	height:32px;
-	position:absolute;
-	top:455px;
-	left:320px;
-}
-
-#three {
-	border:1px solid black;
-	background:grey;
-	width:98px;
-	height:32px;
-	position:absolute;
-	top:488px;
-	left:320px;
-}
-
-#two {
-	border:1px solid black;
-	background:grey;
-	width:65px;
-	height:32px;
-	position:absolute;
-	top:521px;
-	left:320px;
-}
-
 .wrapper {
-	/*border:1px solid rgb(160,0,0);*/
 	margin:auto;
 	width:960px;	
 }
@@ -88,14 +51,7 @@ button:hover {
 	float:left;
 	width:42%;	
 }
-/*
-.logRows {
-	background: white;
-	padding:5px;
-	margin:0px;
-	font-size:20px;
-}
-*/
+
 .logTitle {
 	font-size:24px;
 }
@@ -118,12 +74,12 @@ ul {
 	padding:0px;
 }
 
-#tableCol1 {
+#tableCol2 {
 	top:399px;
 	left:320px;
 }
 
-#tableCol2 {
+#tableCol1 {
 	top:30px;
 	left:320px;
 }
@@ -166,23 +122,7 @@ td:hover {
 .player .boat {
 	background:black;
 }
-/*
-.ia .boat5 {
-	background:rgb(0, 0, 64);
-}
 
-.ia .boat4 {
-	background:rgb(255, 255, 255);
-}
-
-.ia .boat3 {
-	background:rgb(64, 0, 0);
-}
-
-.ia .boat2 {
-	background:rgb(0, 64, 0);
-}
-*/
 .player .boom, .boom {
 	background:red;
 }
