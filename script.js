@@ -1,3 +1,5 @@
+'user strict';
+
 var isEnded;
 var nb;
 var numberOfRows;
@@ -9,8 +11,8 @@ var timer;
 var placetmp = 0;
 
 // Niveau de difficulté: plus il est elevé, plus le jeu est difficile
-var chanceOfHittingBoat = 99;
-console.log(chanceOfHittingBoat);
+var chanceOfHittingBoat = 42;
+
 var isPlayerPlaying = true;
 
 /**
@@ -23,31 +25,26 @@ function checkWinner()
 	if($('.player .boom').length == numberOfBoatsPerPlayer) {
 		$(".logTitle").text("YOU LOSE !");
 		$(".ia .boat:not(.boom)").css("background", "black");
-		
 		$(".playerBoatsRemaining").text("PLAYER *LOSES* (" + $(".ia .boom").length + " Pts)").css("color", "red");
 		$(".PlayerSink").css("color", "red");
 		$(".CPUBoatsRemaining").text("CPU *WINS* (" + $(".player .boom").length + " Pts)").css("color", "green");
 		$(".CPUSink").css("color", "green");
-		
-		isEnded = true;		
+		isEnded = true;
 	}
-	
+
 	// Si le Joueur gagne
 	if($('.ia .boom').length == numberOfBoatsPerPlayer) {
 		$(".logTitle").text("YOU WIN !");
-		
 		$(".playerBoatsRemaining").text("PLAYER *WINS* (" + $(".ia .boom").length + " Pts)").css("color", "green");
 		$(".PlayerSink").css("color", "green");
 		$(".CPUBoatsRemaining").text("CPU *LOSES* (" + $(".player .boom").length + " Pts)").css("color", "red");
 		$(".CPUSink").css("color", "red");
-		
 		isEnded = true;
 	}
-	
+
 	if (isEnded) {
 		countdown();
-		
-		setTimeout(function () { window.location = "index.html" }, 5000);
+		setTimeout(function () { window.location = "index.html"; }, 5000);
 	}
 }
 
@@ -55,7 +52,6 @@ function countdown()
 {
 	$(".redirect").text("New Game in " + timer + "...");
 	timer--;
-	
 	setTimeout(countdown, 1000);
 }
 
@@ -67,31 +63,28 @@ function CPUAimsAtPlayer()
 {
 	var posx = Math.round(Math.random() * (numberOfRows - 1));
 	var posy = Math.round(Math.random() * (numberOfRows - 1));
-	
 	var $td = $('.player .line-' + posy + ' .col-' + posx);
 	var oneBoatCase = Math.round(Math.random() * 13);
-	
 	target = Math.round(Math.random() * 100);
 
 	if (target <= chanceOfHittingBoat) {
 		// le CPU touche
-		if (!$(".player .boat[ind='" + oneBoatCase + "']").hasClass('plouf') || !$(".player .boat[ind='" + oneBoatCase + "']").hasClass('boom')) {		
+		if (!$(".player .boat[ind='" + oneBoatCase + "']").hasClass('plouf') || !$(".player .boat[ind='" + oneBoatCase + "']").hasClass('boom')) {
 			checkHit($(".player .boat[ind='" + oneBoatCase + "']"), "CPU ", ".CPULog");
 			console.log(target, "Touché");
 		}
-		
-		return CPUAimsAtPlayer();
+
+		return new CPUAimsAtPlayer();
 	} else {
 		// Le CPU rate
-		if ($td.hasClass('plouf') || $td.hasClass('boom')) {	
-			return CPUAimsAtPlayer();
-		}
-		else {					
+		if ($td.hasClass('plouf') || $td.hasClass('boom')) {
+			return new CPUAimsAtPlayer();
+		} else {
 			checkHit($td, "CPU ", ".CPULog");
 			console.log(target, "Raté");
 		}
 	}
-		
+
 	checkWinner();
 }
 
@@ -118,7 +111,7 @@ function checkHit(td, string, balise)
 		log(string + " at " + td.attr("coord") + " : <span style='color:red;'>MISSED</span><br>", balise);
 		td.addClass('plouf');
 		isPlayerPlaying = !isPlayerPlaying;
-	}	
+	}
 }
 
 /**
@@ -130,7 +123,7 @@ function checkSunk(nb)
 	if ($(".player .boat" + nb + ".boom").length === nb) {
 		isPlayerBoatSunk[nb-2] = true;
 	}
-	
+
 	if ($(".ia .boat" + nb + ".boom").length === nb) {
 		isCPUBoatSunk[nb-2] = true;
 	}
@@ -145,18 +138,18 @@ function displayDiscoveredBoats()
 	for (var i = 5; i >= 2; i--) {
 		checkSunk(i);
 	}
-	
+
 	for (var i = 0; i < 4; i++) {
 		if (isCPUBoatSunk[i]) {
 			$(".CPUSink[boat='" + (i + 2) + "']").css("visibility", "visible");
 			$(".ia .boat" + (i + 2) + ".boom").css("background", "green");
 		}
-		
+
 		if (isPlayerBoatSunk[i]) {
 			$(".PlayerSink[boat='" + (i + 2) + "']").css("visibility", "visible");
 			$(".player .boat" + (i + 2) + ".boom").css("background", "green");
 		}
-	}	
+	}
 }
 
 /**
@@ -164,20 +157,20 @@ function displayDiscoveredBoats()
  * Le joueur joue (vise le CPU)
 **/
 function PlayerAimsAtCpu()
-{	
-	if (!isEnded) {	
-		if ($(this).hasClass("plouf") || $(this).hasClass("boom")) {			
+{
+	if (!isEnded) {
+		if ($(this).hasClass("plouf") || $(this).hasClass("boom")) {
 			return;
 		} else {
-			if ($('.player .boat').length == numberOfBoatsPerPlayer) {			
+			if ($('.player .boat').length == numberOfBoatsPerPlayer) {
 				checkHit($(this), "Player ", ".playerLog");
-				
+
 				if (!isPlayerPlaying) {
 					CPUAimsAtPlayer();
 				}
 			}
 		}
-		
+
 		displayDiscoveredBoats();
 	}
 }
@@ -192,7 +185,7 @@ var calculCoordIABoatV = function (numberOfCells, numberOfRows)
 {
 	var posx = Math.round(Math.random() * (numberOfRows - 1));
 	var posy = Math.round(Math.random() * (numberOfCells - 1));
-		
+
 	if (!$('.ia .line-' + posy + ' .col-' + posx).hasClass("boat") &&
 	!$('.ia .line-' + (posy+1) + ' .col-' + posx).hasClass("boat") &&
 	!$('.ia .line-' + (posy+2) + ' .col-' + posx).hasClass("boat") &&
@@ -219,7 +212,7 @@ var calculCoordIABoatH = function (numberOfCells, numberOfRows)
 {
 	var posx = Math.round(Math.random() * (numberOfCells - 1));
 	var posy = Math.round(Math.random() * (numberOfRows - 1));
-		
+
 	if (!$('.ia .line-' + posy + ' .col-' + posx).hasClass("boat") &&
 	!$('.ia .line-' + posy + ' .col-' + (posx+1)).hasClass("boat") &&
 	!$('.ia .line-' + posy + ' .col-' + (posx+2)).hasClass("boat") &&
@@ -243,21 +236,21 @@ var calculCoordIABoatH = function (numberOfCells, numberOfRows)
 function addBoatsCPU(numberOfCells)
 {
 	var isHorizontal = Math.round(Math.random());
-			
+
 	// Horizontal
 	if (isHorizontal == 0) {
-		var coordX = calculCoordIABoatH(numberOfCells, numberOfRows); 
-		
+		var coordX = calculCoordIABoatH(numberOfCells, numberOfRows);
+
 		if (coordX.retour) {
 			for (var i = 0; i < numberOfCells; i++) {
 				$('.ia .line-' + coordX.posy + ' .col-' + (coordX.posx+i)).addClass('boat').addClass('boat'+numberOfCells);
 			}
 		}
-	} 
+	}
 	// Vertical
 	else {
-		var coordY = calculCoordIABoatV(numberOfCells, numberOfRows); 
-		
+		var coordY = calculCoordIABoatV(numberOfCells, numberOfRows);
+
 		if (coordY.retour) {
 			for (var i = 0; i < numberOfCells; i++) {
 				$('.ia .line-' + (coordY.posy+i) + ' .col-' + coordY.posx).addClass('boat').addClass('boat'+numberOfCells);
@@ -273,17 +266,17 @@ function addBoatsCPU(numberOfCells)
 function addAllCPUBoats()
 {
 	if ($(".player .boat").length == numberOfBoatsPerPlayer) {
-		
+
 		$('.player td').off('click');
 		$(".logTitle").text("PLAY !");
-		
+
 		// Ajout des bateaux du CPU
-		
+
 		addBoatsCPU(5);
 		addBoatsCPU(4);
 		addBoatsCPU(3);
 		addBoatsCPU(2);
-		
+
 		$(".playerBoatsRemaining").text("PLAYER ");
 		$(".CPUBoatsRemaining").text("CPU ");
 	}
@@ -296,36 +289,34 @@ function addAllCPUBoats()
 function placeBoat(label, posX, posY, nbCases)
 {
 	var isHorizontal = true;
-	
+
 	$(label).on("dblclick", function () {
 		var h = $(this).height();
 		var w = $(this).width();
-				
+
 		$(this).width(h);
-		$(this).height(w);	
-		
+		$(this).height(w);
+
 		isHorizontal = !isHorizontal;
 	});
-	
+
 	$("#play").on("click", function () {
 		var xtmp = (($(label).position().top - posY) / 33);
 		var x = String.fromCharCode(xtmp + 65);
 		var y = (($(label).position().left - posX) / 33) + 1;
-		
+
 		for (var i = 0; i < nbCases; i++) {
 			if (isHorizontal) {
-				var y = (($(label).position().left - posX) / 33) + 1 + i;
+				y = (($(label).position().left - posX) / 33) + 1 + i;
 			} else {
-				var x = String.fromCharCode(xtmp + 65 + i);				
-			}	
-			
+				x = String.fromCharCode(xtmp + 65 + i);
+			}
+
 			$(".player td[coord=" + x + y + "]").addClass("boat").addClass("boat" + nbCases);
 		}
-		
+
 		$(label).remove();
-		
 		addAllCPUBoats();
-		
 		$(this).css("display", "none");
 	});
 }
@@ -333,23 +324,23 @@ function placeBoat(label, posX, posY, nbCases)
 /**
  * coordTables
  * Affiche les coordonnées de chaque cases des 2 tableaux
-**/ 
+**/
 function coordTables()
 {
 	$('.grid').append('<ul id="tableCol1"></ul>');
 	$('.grid').append('<ul id="tableCol2"></ul>');
-	
+
 	for (var i = 1; i < 11; i++) {
 		$("#tableCol1, #tableCol2").append("<li>" + i + "</li>");
 	}
-	
+
 	$('.grid').append('<ul id="tableRow1"></ul>');
 	$('.grid').append('<ul id="tableRow2"></ul>');
-	
+
 	for (var i = 1; i < 11; i++) {
 		$("#tableRow1, #tableRow2").append("<li>" + String.fromCharCode(i + 64) + "</li>");
 	}
-	
+
 	$("#tableCol1").css("visibility", "hidden");
 	$("#tableRow1").css("visibility", "hidden");
 }
@@ -368,26 +359,26 @@ function init()
 	isPlayerBoatSunk = [false, false, false, false];
 	target = 0;
 	timer = 5;
-	
+
 	// Création des tableaux
 	$(".logTitle").text("Player : Prepare your fleet");
-	
+
 	coordTables();
-	
+
 	$('.grid').append('<table class="board ia"></table><br><br>');
 	$('.grid').append('<table class="board player"></table>');
-	
+
 	var $table = $('.board');
-	
+
 	for (var i = 0 ; i < numberOfRows ; i++) {
 		$table.append('<tr class="line line-'+i+'">'+i+'</tr>');
 		var $line = $('.line-'+i);
-		
+
 		for (var j = 0 ; j < numberOfRows ; j++) {
 			$line.append('<td class="col col-' + j + '" coord="' + String.fromCharCode(i + 65) + (j + 1) + '"></td>');
 		}
 	}
-	
+
 	$(".board.ia").css("visibility", "hidden");
 }
 
@@ -395,7 +386,7 @@ function init()
  * placeAllPlayersBoats
  * Place tous les bateaux du joueur
 **/
-function placeAllPlayersBoats () 
+function placeAllPlayersBoats ()
 {
 	placeBoat("#five", 320, 422, 5);
 	placeBoat("#four", 320, 422, 4);
@@ -405,20 +396,19 @@ function placeAllPlayersBoats ()
 
 $(document).ready(function() {
 	init();
-	
+
 	// placement des bateaux
-	
 	$(".player td:not('boat')").on("click", function () {
 		// debut placement bateau5
 		if (placetmp == 0) {
 			placetmp = 1;
-			
+
 			$(this).addClass("boat boat5");
-			
+
 			$(this).next().on("mouseover", function () {
 				if (placetmp == 1) {
 					$("td").removeClass("placetmp");
-					
+			
 					$(this).addClass("placetmp");
 					$(this).next().addClass("placetmp");
 					$(this).next().next().addClass("placetmp");
@@ -568,7 +558,9 @@ $(document).ready(function() {
 		$(".board.ia").css("visibility", "visible");
 		$("#tableCol1").css("visibility", "visible");
 		$("#tableRow1").css("visibility", "visible");
-		
+		chanceOfHittingBoat = $("input[type='radio']:checked").val();
+		console.log(chanceOfHittingBoat);
+		$("form").css("display", "none");
 		if (placetmp == 8) {
 			
 			$(this).remove();
