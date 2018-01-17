@@ -11,7 +11,7 @@ var timer;
 var placetmp = 0;
 
 // Niveau de difficulté: plus il est elevé, plus le jeu est difficile
-var chanceOfHittingBoat = 42;
+var chanceOfHittingBoat = 0;
 
 var isPlayerPlaying = true;
 
@@ -283,45 +283,6 @@ function addAllCPUBoats()
 }
 
 /**
- * placeBoats
- * Ajout un bateau dans le tableau du CPU
-**/
-function placeBoat(label, posX, posY, nbCases)
-{
-	var isHorizontal = true;
-
-	$(label).on("dblclick", function () {
-		var h = $(this).height();
-		var w = $(this).width();
-
-		$(this).width(h);
-		$(this).height(w);
-
-		isHorizontal = !isHorizontal;
-	});
-
-	$("#play").on("click", function () {
-		var xtmp = (($(label).position().top - posY) / 33);
-		var x = String.fromCharCode(xtmp + 65);
-		var y = (($(label).position().left - posX) / 33) + 1;
-
-		for (var i = 0; i < nbCases; i++) {
-			if (isHorizontal) {
-				y = (($(label).position().left - posX) / 33) + 1 + i;
-			} else {
-				x = String.fromCharCode(xtmp + 65 + i);
-			}
-
-			$(".player td[coord=" + x + y + "]").addClass("boat").addClass("boat" + nbCases);
-		}
-
-		$(label).remove();
-		addAllCPUBoats();
-		$(this).css("display", "none");
-	});
-}
-
-/**
  * coordTables
  * Affiche les coordonnées de chaque cases des 2 tableaux
 **/
@@ -363,7 +324,7 @@ function init()
 	// Création des tableaux
 	$(".logTitle").text("Player : Prepare your fleet");
 
-	coordTables();
+	// coordTables();
 
 	$('.grid').append('<table class="board ia"></table><br><br>');
 	$('.grid').append('<table class="board player"></table>');
@@ -380,18 +341,6 @@ function init()
 	}
 
 	$(".board.ia").css("visibility", "hidden");
-}
-
-/**
- * placeAllPlayersBoats
- * Place tous les bateaux du joueur
-**/
-function placeAllPlayersBoats ()
-{
-	placeBoat("#five", 320, 422, 5);
-	placeBoat("#four", 320, 422, 4);
-	placeBoat("#three", 320, 422, 3);
-	placeBoat("#two", 320, 422, 2);
 }
 
 $(document).ready(function() {
